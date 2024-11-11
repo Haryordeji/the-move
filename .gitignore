@@ -1,0 +1,90 @@
+# adapted from https://github.com/github/gitignore/blob/main/Swift.gitignore
+
+# Xcode
+DerivedData/
+*.xcworkspace
+!*.xccheckout
+!*.xcscmblueprint
+xcuserdata/
+*.moved-aside
+*.xcuserstate
+*.xcuserdatad/
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/*.png
+fastlane/test_output/
+
+# Flutter Specific
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.dart_tool/
+.build/
+# Uncomment this line if you have a custom App.framework created.
+# App.framework/
+# Uncomment this line if you have a custom Flutter.framework created.
+# Flutter.framework/
+
+# Archives
+*.xcarchive
+*.ipa
+
+# Packages
+# Add any folders created by app packaging.
+# .dart_tool/
+# Generated files
+/.symlinks/
+/bin/
+/obj/
+/packages/
+/pubspec.lock
+.pub/
+/test/tmp
+
+# Provisioning Profiles
+*.mobileprovision
+*.provisionprofile
+
+# Symbols
+*.dSYM.zip
+*.dSYM
+
+# Logs
+*.log
+
+# Other
+.DS_Store
+.idea/
+.vscode/
+*.orig
+*.swp
+
+# Temporary files
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata
+**/*.pbxuser
+**/*.perspectivev3
+*.xcuserstate
+*.orig
+*.swp
+*.pbxuser
+*.xcscmblueprint
+*.xcscmblueprint/
+
+*repomix-output.txt
