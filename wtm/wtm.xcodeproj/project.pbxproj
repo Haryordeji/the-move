@@ -6,6 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2EC21D202CE2302D0015F9CC /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC21D1F2CE2302D0015F9CC /* AWSAPIPlugin */; };
+		2EC21D222CE2302D0015F9CC /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC21D212CE2302D0015F9CC /* AWSCognitoAuthPlugin */; };
+		2EC21D242CE2302D0015F9CC /* AWSDataStorePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC21D232CE2302D0015F9CC /* AWSDataStorePlugin */; };
+		2EC21D262CE2302D0015F9CC /* AWSLocationGeoPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC21D252CE2302D0015F9CC /* AWSLocationGeoPlugin */; };
+		2EC21D282CE2302D0015F9CC /* AWSPinpointPushNotificationsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC21D272CE2302D0015F9CC /* AWSPinpointPushNotificationsPlugin */; };
+		2EC21D2A2CE2302D0015F9CC /* AWSS3StoragePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC21D292CE2302D0015F9CC /* AWSS3StoragePlugin */; };
+		2EC21D2C2CE2302D0015F9CC /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC21D2B2CE2302D0015F9CC /* Amplify */; };
+		2EC21D2F2CE2312F0015F9CC /* Authenticator in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC21D2E2CE2312F0015F9CC /* Authenticator */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		2EDF205F2CE20B3000B39751 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +63,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EC21D2F2CE2312F0015F9CC /* Authenticator in Frameworks */,
+				2EC21D242CE2302D0015F9CC /* AWSDataStorePlugin in Frameworks */,
+				2EC21D2C2CE2302D0015F9CC /* Amplify in Frameworks */,
+				2EC21D202CE2302D0015F9CC /* AWSAPIPlugin in Frameworks */,
+				2EC21D282CE2302D0015F9CC /* AWSPinpointPushNotificationsPlugin in Frameworks */,
+				2EC21D262CE2302D0015F9CC /* AWSLocationGeoPlugin in Frameworks */,
+				2EC21D222CE2302D0015F9CC /* AWSCognitoAuthPlugin in Frameworks */,
+				2EC21D2A2CE2302D0015F9CC /* AWSS3StoragePlugin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +131,14 @@
 			);
 			name = wtm;
 			packageProductDependencies = (
+				2EC21D1F2CE2302D0015F9CC /* AWSAPIPlugin */,
+				2EC21D212CE2302D0015F9CC /* AWSCognitoAuthPlugin */,
+				2EC21D232CE2302D0015F9CC /* AWSDataStorePlugin */,
+				2EC21D252CE2302D0015F9CC /* AWSLocationGeoPlugin */,
+				2EC21D272CE2302D0015F9CC /* AWSPinpointPushNotificationsPlugin */,
+				2EC21D292CE2302D0015F9CC /* AWSS3StoragePlugin */,
+				2EC21D2B2CE2302D0015F9CC /* Amplify */,
+				2EC21D2E2CE2312F0015F9CC /* Authenticator */,
 			);
 			productName = wtm;
 			productReference = 2EDF204E2CE20B2E00B39751 /* wtm.app */;
@@ -195,6 +222,10 @@
 			);
 			mainGroup = 2EDF20452CE20B2E00B39751;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */,
+				2EC21D2D2CE2312F0015F9CC /* XCRemoteSwiftPackageReference "amplify-ui-swift-authenticator" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2EDF204F2CE20B2E00B39751 /* Products */;
 			projectDirPath = "";
@@ -558,6 +589,68 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/amplify-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.44.0;
+			};
+		};
+		2EC21D2D2CE2312F0015F9CC /* XCRemoteSwiftPackageReference "amplify-ui-swift-authenticator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/amplify-ui-swift-authenticator";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2EC21D1F2CE2302D0015F9CC /* AWSAPIPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSAPIPlugin;
+		};
+		2EC21D212CE2302D0015F9CC /* AWSCognitoAuthPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSCognitoAuthPlugin;
+		};
+		2EC21D232CE2302D0015F9CC /* AWSDataStorePlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSDataStorePlugin;
+		};
+		2EC21D252CE2302D0015F9CC /* AWSLocationGeoPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSLocationGeoPlugin;
+		};
+		2EC21D272CE2302D0015F9CC /* AWSPinpointPushNotificationsPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSPinpointPushNotificationsPlugin;
+		};
+		2EC21D292CE2302D0015F9CC /* AWSS3StoragePlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSS3StoragePlugin;
+		};
+		2EC21D2B2CE2302D0015F9CC /* Amplify */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC21D1E2CE2302D0015F9CC /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = Amplify;
+		};
+		2EC21D2E2CE2312F0015F9CC /* Authenticator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC21D2D2CE2312F0015F9CC /* XCRemoteSwiftPackageReference "amplify-ui-swift-authenticator" */;
+			productName = Authenticator;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2EDF20462CE20B2E00B39751 /* Project object */;
 }
