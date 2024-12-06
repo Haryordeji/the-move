@@ -20,7 +20,7 @@ Real-time Sync: Socket.IO.\
 
 ---
 
-## **3. Database - Dynamo**
+## **3. Database - MongoDB**
 ids would be uuid (128-bit) \
 might want to store graphics for bars?
 ### **Table: Users**
@@ -31,9 +31,20 @@ might want to store graphics for bars?
 | `email`             | String      
 | `age`               | Number      
 | `college`           | String      
-| `friends`           | List<String> (list if ids)
 | `last_location`     | GeoJSON     
 | `last_seen`         | Timestamp   
+
+### **Table: Friendship**
+| **Attribute**       | **Type**    
+|---------------------|-------------
+| `friendship_id`(PK) | String      
+| `user1_id`          | String      
+| `user2_id`          | String      
+| `age`               | Number      
+| `status`            | Number      
+| `created_at`        | Timestamp     
+
+
 ### **Table: Venues**
 | **Attribute**       | **Type**    
 |---------------------|-------------
@@ -56,8 +67,7 @@ might want to store graphics for bars?
 ## **4. Auth and Authorization**
  (AWS Cognito)
 - **User Authentication:**  
-  - Cognito takes care of user sign-up and sign-in, supports email + pass or social (FB, google) login
-  - JWT tokens .
+  Firebase Authentication handles sign-up/sign-in with email/password or social logins (Google, Facebook). \
 
 - **Two types of users:**  
   - **regular:** normal user functions
@@ -88,7 +98,7 @@ type Friendship {
   createdAt: String!      
 }
 
-
+# TO BE UPDATED
 type Venue {
   venue_id: ID!
   name: String!
