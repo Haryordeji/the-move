@@ -6,18 +6,17 @@
 ---
 
 ## **1. Overview**
-AWS Amplify for authentication, backend services, and real-time data sync
-DynamoDB
+Node Backend, Swift Frontend
 
 ---
 
 ## **2. Architecture**
-1. **Frontend:** SwiftUI for iOS.
-2. **Backend:** AWS Amplify (GraphQL + REST API).
-3. **Database:** DynamoDB (NoSQL).
-4. **Authentication:** AWS Cognito via Amplify Auth.
-5. **Location Services:** AWS Location Service for location.
-6. **Real-time Sync:** DynamoDB Streams + AppSync (WebSockets).
+Frontend: SwiftUI for iOS. \
+Backend: Node.js (TypeScript) with Express.js (can host on render)\
+Database: MongoDB Atlas (NoSQL).\
+Authentication: Firebase Authentication.\
+Location Services: Google Maps.\
+Real-time Sync: Socket.IO.\
 
 ---
 
@@ -70,15 +69,25 @@ might want to store graphics for bars?
 ### **GraphQL API (using AppSync)**
 ```graphql
 type User {
-  user_id: ID!
-  username: String!
-  email: String!
-  age: Int
-  college: String
-  friends: [User] // list of users
-  last_location: GeoJSON
-  last_seen: AWSDateTime
+  id: ID!                 # Primary Key
+  username: String!       
+  email: String!          
+  age: Int                
+  college: String         
+  lastLocation: GeoJson  
+  lastSeen: String        
+  createdAt: String!      
+  updatedAt: String!      
 }
+
+type Friendship {
+  id: ID!               # Primary Key
+  user1: ID!            # Foreign Key - Reference to User 1
+  user2: ID!            # Foreign Key - Reference to User 2
+  status: FriendshipStatusEnum! # Friendship status (defined a custom enum, will store int in DB)
+  createdAt: String!      
+}
+
 
 type Venue {
   venue_id: ID!
