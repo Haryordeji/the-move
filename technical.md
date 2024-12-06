@@ -105,13 +105,14 @@ type Venue {
   address: String!
   location: GeoJSON!
   category: String!
+  // fields like avg_age, 
   current_visitors: [User] // list of users
 }
 
 type Recommendation {
   user_id: ID!
   recommended_venues: [Venue] // list of venues (top 4)
-  timestamp: AWSDateTime!
+  timestamp: String!
 }
 ```
 
@@ -128,8 +129,10 @@ At a high level
 
 ## **Data Updates Workflow**
 
-AWS gets users location periodically and stores in DynamoDB (while app is open) \
-At set intervals, looks through friend list and 2/3rd degree connection locations and generates recs, in the past \
-Using AppSync, we would be able to display a map and show where friends are
+Each time a user reports their location, check venues in close proximity \
+If a user is detected as been in a venue, update fields like average age for venue \
+To return recs, for a user. first filter venues in a certain radius \
+such that it is feasible for users to get to the location, then calculate factors like \
+compatibility with other users at each venue, mutual friend count to weight 
 
 ---
