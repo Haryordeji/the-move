@@ -13,8 +13,8 @@ export const createFriendship = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'A user cannot befriend themselves' });
         }
 
-        const user1 = await User.findById(user1_id);
-        const user2 = await User.findById(user2_id);
+        const user1 = await User.findOne({ user_id: user1_id });        
+        const user2 = await User.findOne({user_id: user2_id});
 
         if (!user1 || !user2) {
             return res.status(404).json({ message: 'One or both users not found' });
@@ -22,8 +22,8 @@ export const createFriendship = async (req: Request, res: Response) => {
 
         const existingFriendship = await Friendship.findOne({
             $or: [
-                { user1: user1_id, user2: user2_id },
-                { user1: user2_id, user2: user1_id },
+                { user1_id: user1_id, user2_id: user2_id },
+                { user1_id: user2_id, user2_id: user1_id },
             ],
         });
 
@@ -32,8 +32,8 @@ export const createFriendship = async (req: Request, res: Response) => {
         }
 
         const friendship = new Friendship({
-            user1: user1_id,
-            user2: user2_id,
+            user1_id: user1_id,
+            user2_id: user2_id,
             status: status || 'Pending',
         });
 
@@ -52,10 +52,10 @@ export const getFriendships = async (req: Request, res: Response) => {
 
     try {
         const friendships = await Friendship.find({
-            $or: [{ user1: user_id }, { user2: user_id }],
-        })
-            .populate('user1', 'username email')
-            .populate('user2', 'username email');
+            $or: [{ user1_id: user_id }, { user2_id: user_id }],
+        })        
+            .populate('user1_id', 'username email')
+            .populate('user2_id', 'username email');
 
         res.status(200).json({ friendships });
     } catch (error: any) {
@@ -72,8 +72,8 @@ export const checkFriendshipStatus = async (req: Request, res: Response) => {
     try {
         const friendship = await Friendship.findOne({
             $or: [
-                { user1: user1_id, user2: user2_id },
-                { user1: user2_id, user2: user1_id },
+                { user1_id: user1_id, user2_id: user2_id },
+                { user1_id: user2_id, user2_id: user1_id },
             ],
         });
 
@@ -94,8 +94,8 @@ export const updateFriendshipStatus = async (req: Request, res: Response) => {
     const { friendship_id, status } = req.body;
 
     try {
-        const friendship = await Friendship.findByIdAndUpdate(
-            friendship_id,
+        const friendship = await Friendship.findOneAndUpdate(
+            {friendship_id: friendship_id},
             { status },
             { new: true }
         );
@@ -117,7 +117,7 @@ export const deleteFriendship = async (req: Request, res: Response) => {
     const { friendship_id } = req.params;
 
     try {
-        const friendship = await Friendship.findByIdAndDelete(friendship_id);
+        const friendship = await Friendship.findOneAndDelete({friendship_id: friendship_id});
 
         if (!friendship) {
             return res.status(404).json({ message: 'Friendship not found' });

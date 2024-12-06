@@ -9,7 +9,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
     const { username, email, age, college, last_location } = req.body;
 
     try {
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email: email });
 
         if (existingUser) {
             res.status(400).json({ message: 'Email already in use' });
@@ -38,7 +38,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
     const { user_id } = req.params;
 
     try {
-        const user = await User.findById(user_id);
+        const user = await User.findOne({ user_id: user_id })
 
         if (!user) {
             res.status(404).json({ message: 'User not found' });
@@ -71,7 +71,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
     const updates = req.body;
 
     try {
-        const user = await User.findByIdAndUpdate(user_id, updates, { new: true });
+        const user = await User.findOneAndUpdate({user_id: user_id}, updates, { new: true });
 
         if (!user) {
             res.status(404).json({ message: 'User not found' });
@@ -91,7 +91,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
     const { user_id } = req.params;
 
     try {
-        const user = await User.findByIdAndDelete(user_id);
+        const user = await User.findOneAndDelete({user_id: user_id});
 
         if (!user) {
             res.status(404).json({ message: 'User not found' });
@@ -113,7 +113,7 @@ export const getFullUserProfile = async (req: Request, res: Response): Promise<v
 
     try {
         // Fetch user details
-        const user = await User.findById(user_id);
+        const user = await User.findOne({user_id: user_id});
 
         if (!user) {
             res.status(404).json({ message: 'User not found' });
@@ -122,16 +122,16 @@ export const getFullUserProfile = async (req: Request, res: Response): Promise<v
 
         // Fetch friendships for the user
         const friendships = await Friendship.find({
-            $or: [{ user1: user_id }, { user2: user_id }],
+            $or: [{ user1_id: user_id }, { user2_id: user_id }],
         })
-            .populate('user1', 'username')
-            .populate('user2', 'username');
+            .populate('user1_id', 'status')
+            .populate('user2_id', 'status');
 
         const friends = friendships.map((friendship) => {
             if (friendship.user1_id === user_id) {
-                return friendship.user2_id;
+                return { user_id: friendship.user2_id, status: friendship.status };
             } else {
-                return friendship.user1_id; 
+                return {user_id: friendship.user1_id, status: friendship.status}; 
             }
         });
 
