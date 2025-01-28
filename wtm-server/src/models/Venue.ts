@@ -1,6 +1,7 @@
 // src/models/Venue.ts
 import { Schema, Document, model } from 'mongoose';
 import { randomUUID } from 'crypto';
+import User from './User';
 
 export interface IVenue extends Document {
     venue_id: string;
@@ -30,6 +31,17 @@ const VenueSchema: Schema = new Schema(
     },
     { timestamps: true }
 );
+
+// Middleware to update avg_age when current_visitors changes
+VenueSchema.pre('save', async function (this: IVenue, next) {
+    if (this.isModified('current_visitors')) {
+        const users = await User.find({ user_id: { $in: this.current_visitors } });
+        const totalAge = users.reduce((sum, user) => sum + (user.age || 0), 0);
+        this.avg_age = totalAge / users.length;
+    }
+    next();
+});
+
 
 // Index for geospatial queries
 VenueSchema.index({ location: '2dsphere' });

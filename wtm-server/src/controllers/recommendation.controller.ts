@@ -3,12 +3,13 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import Venue from '../models/Venue';
 import Recommendation from '../models/Recommendation';
+import { findMutualFriends } from '../helpers/friendshipHelper';
 
 /**
  * Get recommendations for a user
  */
 export const getRecommendations = async (req: Request, res: Response) => {
-    const { user_id, radius } = req.body; // radius in meters
+    const { user_id } = req.body; 
 
     try {
         const user = await User.findOne({ user_id });
@@ -19,35 +20,46 @@ export const getRecommendations = async (req: Request, res: Response) => {
         }
 
         // Find venues within the specified radius if user's last location is available
-        let venues = [];
-        if (user.last_location) {
-            venues = await Venue.find({
+        const venues = user.last_location
+            ? await Venue.find({
                 location: {
                     $near: {
                         $geometry: {
                             type: 'Point',
-                            coordinates: user.last_location.coordinates,
+                            coordinates: user.last_location,
                         },
-                        $maxDistance: radius,
+                        $maxDistance: 2500, // 2.5km placeholder
                     },
                 },
-            });
-        } else {
-            venues = await Venue.find();
-        }
+            })
+            : [];
 
-        // Sort venues by some age similarity to user, arbitraty if avg_age is not available
-        
-        const sortedVenues = venues.sort((a, b) => {
-            const userAge = user.age;
-            const aAge = a.avg_age || 0;
-            const bAge = b.avg_age || 0;
+        // Find mutual friends up to 3 degrees
+        const mutualFriends = await findMutualFriends(user_id, 3);
 
-            const aDiff = Math.abs(userAge - aAge);
-            const bDiff = Math.abs(userAge - bAge);
+        // Calculate scores for each venue
+        const scoredVenues = venues.map((venue) => {
+            // Age similarity score (closer is better)
+            const ageDiff = venue.avg_age !== undefined ? Math.abs(venue.avg_age - user.age) : Math.abs(21 - user.age);
+            const ageScore = 1 / (1 + ageDiff); // nomarlization 
 
-            return aDiff - bDiff;
+            // Mutual friends score (more is better)
+            const mutualFriendsInVenue = venue.current_visitors.filter((visitor) =>
+                mutualFriends.includes(visitor)
+            ).length;
+            const mutualFriendsScore = mutualFriendsInVenue / mutualFriends.length; // Normalize to [0, 1]
+
+            // equal weightage to both scores
+            const combinedScore = 0.5 * ageScore + 0.5 * mutualFriendsScore;
+
+            return {
+                ...venue.toObject(),
+                score: combinedScore,
+            };
         });
+
+        // Sort venues by combined score
+        const sortedVenues = scoredVenues.sort((a, b) => b.score - a.score);
 
         // Get top 4 venues
         const top4Venues = sortedVenues.slice(0, 4);
@@ -56,11 +68,31 @@ export const getRecommendations = async (req: Request, res: Response) => {
         const recommendation = new Recommendation({
             user_id,
             recommended_venues: top4Venues.map((venue) => venue.venue_id),
+            timestamp: new Date(),
         });
 
         await recommendation.save();
 
         res.status(200).json({ message: 'Recommendations generated', recommendation });
+    } catch (error: any) {
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+// return already saved recommendations for a given user_id, only recompute if the last recommendation is older than 25mins
+export const getRecommendationsCached = async (req: Request, res: Response) => {
+    const { user_id } = req.params;
+
+    try {
+        const lastRecommendation = await Recommendation.findOne({ user_id }).sort({ timestamp: -1 });
+
+        if (lastRecommendation && Date.now() - lastRecommendation.timestamp.getTime() < 25 * 60 * 1000) {
+            res.status(200).json({ message: 'Recommendations found', recommendation: lastRecommendation });
+            return;
+        }
+
+        // If no recommendations found or the last recommendation is older than 25 mins, recompute
+        getRecommendations(req, res);
     } catch (error: any) {
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
