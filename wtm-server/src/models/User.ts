@@ -6,7 +6,7 @@ export interface IUser extends Document {
     user_id: string; 
     username: string;
     email: string;
-    age?: number;
+    age: number;
     college?: string;
     last_location?: {
         type: string;
