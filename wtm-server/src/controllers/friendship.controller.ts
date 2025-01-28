@@ -4,6 +4,7 @@ import User from '../models/User';
 
 /**
  * Create a new friendship between two users
+ * New friendship status is 'Pending' by default
  */
 export const createFriendship = async (req: Request, res: Response) => {
     const { user1_id, user2_id, status } = req.body;
@@ -34,7 +35,7 @@ export const createFriendship = async (req: Request, res: Response) => {
         const friendship = new Friendship({
             user1_id: user1_id,
             user2_id: user2_id,
-            status: status || 'Pending',
+            status:  'Pending',
         });
 
         await friendship.save();
@@ -49,18 +50,24 @@ export const createFriendship = async (req: Request, res: Response) => {
  */
 export const getFriendships = async (req: Request, res: Response) => {
     const { user_id } = req.params;
-
+    
     try {
         const friendships = await Friendship.find({
-            $or: [{ user1_id: user_id }, { user2_id: user_id }],
-        })        
-            .populate('user1_id', 'username email')
-            .populate('user2_id', 'username email');
+            $or: [
+                { user1_id: user_id },
+                { user2_id: user_id },
+            ],
+        });
 
-        res.status(200).json({ friendships });
+        if (!friendships) {
+            return res.status(404).json({ message: 'No friendships found' });
+        }
+
+        res.status(200).json({ message: 'Friendships found', friendships });
     } catch (error: any) {
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
+    
 };
 
 /**
@@ -78,9 +85,9 @@ export const checkFriendshipStatus = async (req: Request, res: Response) => {
         });
 
         if (friendship) {
-            res.status(200).json({ message: 'Users are friends', status: friendship.status });
+            res.status(200).json({ message: 'Current Friendship status', status: friendship.status });
         } else {
-            res.status(404).json({ message: 'Users are not friends' });
+            res.status(404).json({ message: 'No Frienship Connection' });
         }
     } catch (error: any) {
         res.status(500).json({ message: 'Internal server error', error: error.message });
@@ -96,8 +103,7 @@ export const updateFriendshipStatus = async (req: Request, res: Response) => {
     try {
         const friendship = await Friendship.findOneAndUpdate(
             {friendship_id: friendship_id},
-            { status },
-            { new: true }
+            { status }        
         );
 
         if (!friendship) {
