@@ -2,11 +2,13 @@
   "name": "wtm-server",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node-dev src/index.ts",
-    "seed"  : "ts-node-dev src/seeders/seed.ts"
-  },
+ "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "ts-node-dev src/index.ts",
+  "seed": "ts-node-dev src/seeders/seed.ts",
+  "seed:enhanced": "ts-node-dev src/seeders/enhanced-seed.ts",
+  "test:recommendations": "ts-node-dev src/test/recommendation-test.ts"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -16,6 +18,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "firebase-admin": "^13.3.0",
+    "joi": "^17.13.3",
     "mongodb": "^6.11.0",
     "mongoose": "^8.8.4"
   },

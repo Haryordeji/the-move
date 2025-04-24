@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
 
-mongoose.set('debug', true);
+const isDevEnvironment = process.env.NODE_ENV !== 'production';
+if (isDevEnvironment) {
+  mongoose.set('debug', true);
+}
+
 const connectDB = async () => {
-    console.log(process.env.MONGO_URI)
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI as string, {
             dbName: 'wtm',

@@ -1,3 +1,6 @@
 export enum FriendshipStatusEnum {
-    'requested', 'accepted', 'blocked'
+    REQUESTED = 'requested',
+    PENDING = 'pending',
+    ACCEPTED = 'accepted', 
+    BLOCKED = 'blocked'
 }

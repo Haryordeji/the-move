@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Friendship from '../models/Friendship';
 import User from '../models/User';
+import { FriendshipStatusEnum } from '../shared';
 
 /**
  * Create a new friendship between two users
@@ -8,7 +9,7 @@ import User from '../models/User';
  * Requesting friend is user1_id by default
  */
 export const createFriendship = async (req: Request, res: Response) => {
-    const { user1_id, user2_id, status } = req.body;
+    const { user1_id, user2_id } = req.body;
 
     try {
         if (user1_id === user2_id) {
@@ -36,7 +37,8 @@ export const createFriendship = async (req: Request, res: Response) => {
         const friendship = new Friendship({
             user1_id: user1_id,
             user2_id: user2_id,
-            status:  'Pending',
+            requester_id: user1_id, // User1 is the requester
+            status: FriendshipStatusEnum.REQUESTED, // Fixed enum reference
         });
 
         await friendship.save();
@@ -102,9 +104,11 @@ export const updateFriendshipStatus = async (req: Request, res: Response) => {
     const { friendship_id, status } = req.body;
 
     try {
+        // Fixed query to find by friendship_id field, not _id
         const friendship = await Friendship.findOneAndUpdate(
-            {friendship_id: friendship_id},
-            { status }        
+            { friendship_id: friendship_id },
+            { status },
+            { new: true }
         );
 
         if (!friendship) {
@@ -117,14 +121,12 @@ export const updateFriendshipStatus = async (req: Request, res: Response) => {
     }
 };
 
-/**
- * Delete a friendship
- */
 export const deleteFriendship = async (req: Request, res: Response) => {
     const { friendship_id } = req.params;
 
     try {
-        const friendship = await Friendship.findOneAndDelete({friendship_id: friendship_id});
+        // Fixed query to find by friendship_id field
+        const friendship = await Friendship.findOneAndDelete({ friendship_id: friendship_id });
 
         if (!friendship) {
             return res.status(404).json({ message: 'Friendship not found' });
