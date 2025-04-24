@@ -5,6 +5,7 @@ import User from '../models/User';
 /**
  * Create a new friendship between two users
  * New friendship status is 'Pending' by default
+ * Requesting friend is user1_id by default
  */
 export const createFriendship = async (req: Request, res: Response) => {
     const { user1_id, user2_id, status } = req.body;

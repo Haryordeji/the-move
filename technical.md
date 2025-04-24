@@ -6,7 +6,7 @@
 ---
 
 ## **1. Overview**
-Node Backend, Swift Frontend
+Node Backend, React Native Frontend
 
 ---
 
