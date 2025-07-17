@@ -1,6 +1,6 @@
 export enum FriendshipStatusEnum {
-    REQUESTED = 'requested',
-    PENDING = 'pending',
-    ACCEPTED = 'accepted', 
-    BLOCKED = 'blocked'
+    REQUESTED = 'requested',  // Initial request sent
+    ACCEPTED = 'accepted',    // Request accepted, users are friends
+    DECLINED = 'declined',    // Request declined
+    BLOCKED = 'blocked'       // User blocked
 }

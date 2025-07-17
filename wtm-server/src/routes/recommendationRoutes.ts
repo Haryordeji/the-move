@@ -3,7 +3,7 @@ import { getRecommendations, getRecommendationsCached } from '../controllers/rec
 
 const router = express.Router();
 
-router.get('/recommendations/new', getRecommendations);
-router.get('/recommendations/current', getRecommendationsCached);
+router.post('/recommendations/new', getRecommendations);
+router.get('/recommendations/:user_id', getRecommendationsCached);
 
 export default router;
