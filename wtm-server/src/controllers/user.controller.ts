@@ -123,24 +123,35 @@ export const getFullUserProfile = async (req: Request, res: Response): Promise<v
         // Fetch friendships for the user
         const friendships = await Friendship.find({
             $or: [{ user1_id: user_id }, { user2_id: user_id }],
-        })
-            .populate('user1_id', 'status')
-            .populate('user2_id', 'status');
-
-        const friends = friendships.map((friendship) => {
-            if (friendship.user1_id === user_id) {
-                return { user_id: friendship.user2_id, status: friendship.status };
-            } else {
-                return {user_id: friendship.user1_id, status: friendship.status}; 
-            }
         });
+
+        // Process friendships to get friend details
+        const friends = await Promise.all(
+            friendships.map(async (friendship) => {
+                const friendId = friendship.user1_id === user_id 
+                    ? friendship.user2_id 
+                    : friendship.user1_id;
+                
+                const friend = await User.findOne(
+                    { user_id: friendId }, 
+                    'user_id username email age college last_seen'
+                );
+
+                return {
+                    friendship_id: friendship.friendship_id,
+                    friend: friend,
+                    status: friendship.status,
+                    is_requester: friendship.requester_id === user_id,
+                    created_at: friendship.created_at
+                };
+            })
+        );
 
         res.status(200).json({
             user,
-            friends,
+            friends: friends.filter(f => f.friend !== null),
         });
     } catch (error: any) {
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 };
-
